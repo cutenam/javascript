@@ -1,44 +1,14 @@
 <html>
 <head>
-	<title>Introduction to the DOM</title>
+	<title>DOM</title>
 </head>
 <body>
 	<h1>
-		Introduction to the DOM
+		DOM
 	</h1>
-	<p class="test">There are a number of reasons why the DOM is awesome, here are some:</p>
 	<ul>
-		<li id="everywhere">It can be found everywhere.</li>
-		<li class="test">It's easy to use.</li>
-		<li class="test">It can help you to find what you want,really quickly.</li>
+		<li><a href="dom.html">dom.html</a></li>
+		<li><a href="dom_load.html">dom_load.html</a></li>
 	</ul>
-	<script src="dom.js"></script>
 </body>
 </html>
-
-<!--
-위 문서에서 루트 엘리먼트는 <html> 엘리먼트이다.
-자바스크립트에서 루트 엘리먼트에 접근하는 것은 아래와 같다.-->
-<!--
-<script>
-//	console.log(document.documentElement);
-</script>
--->
-<!--
-다른 DOM 노드와 마찬가지로 루트 노드 역시 탐색에 쓰이는 모든 포인터들을 갖추고 있다. 
-만약, <h1> 엘리먼트를 얻으려고 다음과 같이 한다면,
--->
-<!--
-<script>
-//	console.log(document.documentElement.firstChild.nextSibling.firstChild)  // null 
-</script>
--->
-<!--
-위 스크립트가 <h1> 을 가리키지 않는 이유는, 공백문제임
-사실은 <html> 과 <head> 엘리먼트 사이에 줄바꿈이 있으며, 이는 공백으로 취급된다. 이는 곧 <head> 엘리먼트가 아닌 텍스트노드가 먼저 등장한다는 뜻이다.
-
-1) 정확하고 깔끔하게 작성되 HTML마크업도 포인터만 사용하여 DOM 을 탐색하려고 할 때 매우 혼란스러운 상황을 야기할 수 있다. 
-2) DOM 포인터만을 사용하여 문서를 탐색하기란 매우 지저분할 뿐 아니라 비현실적이다.
-3) 많은 경우 여러분은 텍스트 노드에 직접 접근할 필요가 없다. 오직 텍스트 노드를 둘러싸고 있는 엘리먼트에 접근해야 한다.
--->
-

@@ -1,0 +1,33 @@
+<html>
+<head>
+	<title>Introduction to the DOM</title>
+</head>
+<body>
+	<h1>
+		Introduction to the DOM
+	</h1>
+	<p class="test">There are a number of reasons why the DOM is awesome, here are some:</p>
+	<ul>
+		<li id="everywhere">It can be found everywhere.</li>
+		<li class="test">It's easy to use.</li>
+		<li class="test">It can help you to find what you want,really quickly.</li>
+	</ul>
+	<script src="dom.js"></script>
+	<script src="dom_load.js"></script>
+</body>
+</html>
+<!-- HTML DOM 문서로 작업할 때 발생하는 어려움 중 하나는, DOM 이 완전히 로딩되기 이전에도 자바스크립트 코드가 실행될 수 있다는 점이다.
+	브라우저 내부에서 일어나는 연산 순서는 다음과 같다.
+	
+	(1) HTML 을 파싱한다.
+	(2) 외부 스크립트나 스타일시트를 로딩한다.
+	(3) 문서 내의 스크립트를 파싱하면서 실행시킨다.
+	(4) HTML DOM이 모두 생성되었다.
+	(5) 그림과 외부 콘텐츠를 로딩한다.
+	(6) 페이지 로딩이 끝났다.
+	
+	헤더에 포함된 스크립트와 외부 파일에서 불러온 스크립트는 HTML DOM 이 실제로 생성되기 이전에 실행된다.
+	그러므로, 헤더나 외부 파일에서 실행된 모든 스크립트는 DOM 에 접근할 수 없다.
+	
+	이러한 문제를 피할 수 있는 몇가지 방법이 있다.
+-->
