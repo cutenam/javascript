@@ -1,17 +1,38 @@
 <html>
 <head>
 	<title>Introduction to the DOM</title>
+	<style>
+		dd {
+			display: none;
+		}
+	</style>
 </head>
 <body>
 	<h1>
 		Introduction to the DOM
 	</h1>
-	<p class="test">There are a number of reasons why the DOM is awesome, here are some:</p>
+	<p class="test"><strong>strong</strong>sThere are a number of reasons why the DOM is awesome, here are some:</p>
 	<ul>
 		<li id="everywhere">It can be found everywhere.</li>
 		<li class="test">It's easy to use.</li>
 		<li class="test">It can help you to find what you want,really quickly.</li>
 	</ul>
+	<div>
+		<form name="myForm" action="/text.cgi" method="POST">
+			<input name="myName" value=""/>
+		</form>
+	</div>
+	<!-- 정의 목록을 담은 HTML 문서. 각 정의는 현재 감추어져 있다. -->
+	<dl>
+		<dt>Cats</dt>
+		<dd>A furry, friendly, creature.</dd>
+		<dt>Dog</dt>
+		<dd>Like to play and run around.</dd>
+		<dt>Mice</dt>
+		<dd>Cats like to eat them.</dd>
+	</dl>
+	<ol></ol>
+<!-- 	<script src="dom_load.js"></script> -->
 	<script src="dom.js"></script>
 </body>
 </html>

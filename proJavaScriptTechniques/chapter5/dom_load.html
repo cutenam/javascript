@@ -1,19 +1,31 @@
 <html>
 <head>
-	<title>Introduction to the DOM</title>
+	<title>Test DOM Loading</title>
+<!-- 	<script src="dom_load.js"></script> -->
+	<script type="text/javascript">
+		function init() {
+			alert("The DOM is loaded!");
+			tag("h1")[0].style.border = "4px solid black";
+		}
+		
+/*
+		domReady(function(){
+			alert("The DOM is loaded!");
+			tag("h1")[0].style.border = "4px solid black";
+		});
+*/
+	</script>
 </head>
 <body>
-	<h1>
-		Introduction to the DOM
-	</h1>
-	<p class="test">There are a number of reasons why the DOM is awesome, here are some:</p>
+	<h1> Testing DOM Loading</h1>
 	<ul>
 		<li id="everywhere">It can be found everywhere.</li>
 		<li class="test">It's easy to use.</li>
 		<li class="test">It can help you to find what you want,really quickly.</li>
 	</ul>
-	<script src="dom.js"></script>
+	<!-- Lots of HTML goes here -->
 	<script src="dom_load.js"></script>
+<!-- 	<script type="text/javascript">init();</script> -->
 </body>
 </html>
 <!-- HTML DOM 문서로 작업할 때 발생하는 어려움 중 하나는, DOM 이 완전히 로딩되기 이전에도 자바스크립트 코드가 실행될 수 있다는 점이다.
