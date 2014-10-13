@@ -62,6 +62,7 @@ function loaded() {
 *	- li 위에 마우스를 올릴 때마다 실제로는 서로 다른 두 개의 엘리먼트를 전환시키고 있다.
 *		li 엘리먼트는 a엘리먼트를 포함하고 있으므로 마우스를 올릴 때는 단지 li 만이 아니라, a 엘리먼트 위에도 올리는 셈이다.
 */
+/*
 var li = document.getElementsByTagName("li");
 for (var i=0; i < li.length; i++) {
 	// li 엘리먼트에 mouseover 처리기를 붙인다.
@@ -76,6 +77,7 @@ for (var i=0; i < li.length; i++) {
 		this.style.backgroundColor = "white";
 	};
 }
+*/
 /*
 *	이벤트가 호출되는 정확한 과정
 *		(1) li mouseover : li 엘리먼트 위로 마우스를 움직인다.
@@ -133,6 +135,7 @@ document.getElementsByTagName("textarea")[0].onkeypress = function(e) {
 // 페이지 내의 모든 클릭된 li 엘리먼트에 대해 배경색과 전경색을 변경한다.
 // 모든 li 엘리먼트를 찾고 각각에 click 처리기를 연결한다.
 
+/*
 var li2 = document.getElementsByTagName("li");
 
 for(var i=0; i < li2.length; i++) {
@@ -144,8 +147,52 @@ function handleClick() {
 	this.style.backgroundColor = "blue";
 	this.style.color = "white";
 }
+*/
 
+/*
+*	이벤트 버블 취소하기
+*		- 이벤트 제어 하는 방법
+*		- 만일 이벤트가 오직 그 대상에서만 발생할 뿐 그 부모로는 더 이상 전파되지 않기를 원한다 하더라도, 그 과정을 멈출 방법이 없다.
+*		- 이벤트의 버블 (또는 캡쳐) 을 멈추는 것은 복잡한 애플리케이션에서 정말 유용하게 쓰일 수 있다.
+*		- IE 에서는 이벤트의 버믈 과정을 멈추기 위한 방법이 그 외의 모든 브라우저와는 다른 형태로 제공된다.
+*		
+*		- 이벤트 버블 과정을 취소해야하는 경우
+*			동적 애플리케이션을 개발하려 할때 (키보드나 마우스 이벤트를 다루는 애플리케이션)
+*/
+// 이벤트 버믈 과정을 취소할 수 있는 일반적인 함수
+// 이 함수는 이벤트 버믈 과정을 취소하는 과정을 하나는 표준 W3C 방식과 다른 하나는 IE 의 비표준 방식으로 다룬다.
+function stopBubble(e) {
+	// 이벤트 객체가 제공되었다면, 이는 IE 가 아닌 브라우저이다.
+	if(e) {
+		// 그러므로 여기서는 W3C의 stopPropagation() 메서드가 지원된다.
+		e.stopPropagation();
+	} else {
+		//그렇지 않다면, 이벤트 버블 과정을 취소하기 위해 IE 방식을 사용해야 한다.
+		window.event.cancelBubble = true;
+	}
+}
 
+// 마우스가 올려진 엘리먼트 주변에 빨간 테두리를 추가하는 함수
+// 모든 DOM 엘리먼트에 mouseover와 mouseout 이벤트 처리기를 추가했다.
+// 만약 이벤트 버블을 취소하지 않는다면, 마우스를 어떤 엘리먼트 위에 올릴 때마다 해당 엘리먼트 뿐 아니라, 그 부모 엘리먼트의 주변에도 빨간 테두리가 추가된다.
+// stopBubble() 을 사용해서 상호 작용이 가능한 엘리먼트들을 생성하기
+// DOM 에 있는 모든 엘리먼트를 찾으면서 탐색한다.
+var all = document.getElementsByTagName("*");
+for (var i=0; i<all.length; i++) {
+	// 사용자가 어떤 엘리먼트 위로 마우스를 움직이기를 기다렸다가
+	// 그 엘리먼트 둘레에 빨간 테두리를 추가한다.
+	all[i].onmouseover = function(e) {
+		this.style.border = "1px solid red";
+		stopBubble(e);
+	};
+	
+	// 사용자가 엘리먼트 바깥으로 마우스를 치우기를 기다렸다가 
+	// 아까 추가했던 테두리를 제거한다.
+	all[i].onmouseout = function(e) {
+		this.style.border = "0px";
+		stopBubble(e);
+	};
+}
 
 
 
