@@ -177,6 +177,7 @@ function stopBubble(e) {
 // 만약 이벤트 버블을 취소하지 않는다면, 마우스를 어떤 엘리먼트 위에 올릴 때마다 해당 엘리먼트 뿐 아니라, 그 부모 엘리먼트의 주변에도 빨간 테두리가 추가된다.
 // stopBubble() 을 사용해서 상호 작용이 가능한 엘리먼트들을 생성하기
 // DOM 에 있는 모든 엘리먼트를 찾으면서 탐색한다.
+/*
 var all = document.getElementsByTagName("*");
 for (var i=0; i<all.length; i++) {
 	// 사용자가 어떤 엘리먼트 위로 마우스를 움직이기를 기다렸다가
@@ -193,6 +194,7 @@ for (var i=0; i<all.length; i++) {
 		stopBubble(e);
 	};
 }
+*/
 
 /*
 *	브라우저의 기본 동작을 덮어쓰기
@@ -229,12 +231,95 @@ function stopDefault(e) {
 	return false;
 }
 
+// stopDefault() 함수를 사용해서 브라우저의 기능을 덮어쓰기
+/*
+*	이 코드는 페이지 내의 모든 링크에 대해서, 완전히 새로운 페이지를 열지 않고 자체적인 <iframe> 에 로딩되게 한다. 
+*	이렇게 하면 사용자가 현재 페이지에 계속 머무르게 하는 효과가 있다.
+*/
+// 페이지 안에 이미 ID가 'Iframe' 인 IFrame 이 있다고 가정하자.
+var iframe = document.getElementById("iframe");
 
+// 페이지 안의 모든 a 엘리먼트를 찾는다.
+var a = document.getElementsByTagName("a");
+for( var i=0; i < a.length; i++) {
+	// a 에 click 처리기를 연결한다.
+	a[i].onclick = function(e) {
+		// IFrame 의 주소를 설정한다.
+		iframe.src = this.href;		// 동일 origin 에 있는 페이지만 가능
+		
+		console.log(this.href);
+		
+		// a 가 가리키는 웹사이트를 방문하는, 브라우저의 기본 동작을 막는다.
+		return stopDefault(e);
+	};
+	
+}
 
+/*
+*	이벤트 리스너 연결하기
+*	- 초창기 : HTML 문서 내에 인라인으로 이벤트 처리기 코드를 작성함
+*			그러나, 인라인 방식은 무간섭 DOM 스크립팅의 데이터 추상화 원칙에 위배됨
+*	- W3C 표준 : 넷스케이프의 변형판
+*				IE 모델은 그대로 남음
+*	- 이벤트를 안정적으로 등록할 수 있는 3가지 방법
+*		(1) 인라인 방식 : 신뢰할만하며, 일관된 형태로 동작함
+*		(2) IE 방식 
+*		(3) W3C 방식
+*	
+*/
+/*
+*	전통적인 연결 방법
+*		- 이벤트 처리기를 연결하기 위한 가장 간단한 방법이자 가장 널리 호환되는 방법
+*		- DOM 엘리먼트에 프로퍼티의 형태로 함수를 붙임
+*		- 장점
+*			(1) 간단하고, 일관적임, 어떤 브라우저를 사용하든 관계 없이 동일한 동작을 보장받을 수 있다.
+*			(2) 이벤트를 다룰 때, this 키워드가 현재 엘리먼트를 참조한다. 
+*		- 단점
+*			(1) 캡처 단계와 버블 단계 모두에 대해서가 아니라, 오직 이벤트 버블 단계에서만 작동한다.
+*			(2) 어떤 엘리먼트에 대해서 한 번에 단 하나의 이벤트 처리기만 연결할 수 있다.
+*				window.onload 프로퍼티와 같이 널리 쓰이는 이벤트를 다룰 때면, 다른 곳에서 동일한 이벤트를 연결해 놓은 경우, 다시 이벤트를 연결하면 기존 이벤트의 연결을 덮어씀
+*			(3) 이벤트 객체 전달 인자는 IE 가 아닌 브라우저에서만 사용 가능하다.			
+*		
+*/
 
+// 전통적인 이벤트 연결 방법으로 이벤트 붙이기
 
+// 첫번째 form 엘리먼트를 찾아서, submit 처리기를 붙인다.
+document.getElementsByTagName("form")[0].onsubmit = function(e) {
+	// 모든 폼 제출 시도를 중단시킨다.
+	return stopDefault(e);
+}
 
+// 문서의 body 엘리먼트에 keypress 이벤트 처리기를 붙인다.
+//document.body.onkeypress = myKeyPressHandler;
 
+// 페이지에 load 이벤트 처리기를 붙인다.
+//window.onload = function(){...}
+
+function myKeyPressHandler() {
+	alert("HI!");
+}
+
+// 서로를 덮어쓰는 이벤트 처리기
+
+// 최초의 load 처리기를 연결한다.
+window.onload = myFirstHandler;
+
+// 코드의 어딘가, 여러분이 포함시킨 라이브러리에서 여러분이 앞서 연결해놓은 처리기를 덮어 써버린다.
+// 이제 페이지 로딩이 완료되면, mySecondHandler 만이 호출된다.
+window.onload = mySecondHandler;
+
+function myFirstHandler() {
+	alert("myFirstHandler");	 
+}
+
+function mySecondHandler() {
+	alert("mySecondeHandler");	 
+}
+/*
+*	DOM 연결 : W3C
+*		- DOM 엘리먼트에 이벤트 처리기를 연결하는 방법 중 표준으로 채택된 것은
+*/
 
 
 
