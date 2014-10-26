@@ -40,7 +40,7 @@
 *		- 페이지가 완전히 로딩되면 브라우저가 window.load에 연결된 함수를 호출하고 실행함
 */
 // 페이지가 로딩될 때마다 호출할 함수를 등록한다.
-window.onload = loaded;  // loaded() 는 함수 실행 결과가 등록됨
+//window.onload = loaded;  // loaded() 는 함수 실행 결과가 등록됨
 
 // 페이지가 로딩될 때마다 호출할 함수
 function loaded() {
@@ -114,6 +114,7 @@ for (var i=0; i < li.length; i++) {
 // 이벤트 객체를 범용적으로 사용하는 예
 // 페이지의 첫째 textarea 를 찾고, keypress 리스너를 연결한다.
 // textarea 안에서 Enter 키를 치면 일반적으로 새로운 줄바꿈이 생기는데, 이 기본 기능을 막음
+/*
 document.getElementsByTagName("textarea")[0].onkeypress = function(e) {
 	// 만일 이벤트 객체가 존재하지 않는다면 전역의 이벤트 객체를 선택한다.(IE)
 	e = e || window.event;
@@ -123,6 +124,7 @@ document.getElementsByTagName("textarea")[0].onkeypress = function(e) {
 	console.log(e.keyCode);
 	return e.keyCode !== 13;
 }
+*/
 
 /*
 *	this 키워드
@@ -285,10 +287,12 @@ for( var i=0; i < a.length; i++) {
 // 전통적인 이벤트 연결 방법으로 이벤트 붙이기
 
 // 첫번째 form 엘리먼트를 찾아서, submit 처리기를 붙인다.
+/*
 document.getElementsByTagName("form")[0].onsubmit = function(e) {
 	// 모든 폼 제출 시도를 중단시킨다.
 	return stopDefault(e);
 }
+*/
 
 // 문서의 body 엘리먼트에 keypress 이벤트 처리기를 붙인다.
 //document.body.onkeypress = myKeyPressHandler;
@@ -303,11 +307,11 @@ function myKeyPressHandler() {
 // 서로를 덮어쓰는 이벤트 처리기
 
 // 최초의 load 처리기를 연결한다.
-window.onload = myFirstHandler;
+//window.onload = myFirstHandler;
 
 // 코드의 어딘가, 여러분이 포함시킨 라이브러리에서 여러분이 앞서 연결해놓은 처리기를 덮어 써버린다.
 // 이제 페이지 로딩이 완료되면, mySecondHandler 만이 호출된다.
-window.onload = mySecondHandler;
+//window.onload = mySecondHandler;
 
 function myFirstHandler() {
 	alert("myFirstHandler");	 
@@ -318,15 +322,176 @@ function mySecondHandler() {
 }
 /*
 *	DOM 연결 : W3C
-*		- DOM 엘리먼트에 이벤트 처리기를 연결하는 방법 중 표준으로 채택된 것은
+*		- DOM 엘리먼트에 이벤트 처리기를 연결하는 방법 중 표준으로 채택된 것은 W3C 의 방법이 유일하다. 
+*		- IE 를 제외한 모든 최신 브라우저들은 이벤트를 붙이는 데 이 방법을 지원함
+*		- 모든 DOM 엘리먼트마다 addEventListener 라는 함수가 존재하며, 이 함수는 3개의 매개변수를 받는다.
+*		- addEventListener 함수 매개변수
+*			이벤트 이름(ex. click), 이벤트를 처리할 함수, 이벤트 캡쳐 과정을 활성화할지 여부를 결정하는 boolean 플래그
+*		- W3C 연결 방법의 장점
+*			(1) 이 메서드는 이벤트를 처리하는 과정에서 캡처와 버블 단계를 모두 지원한다.
+*				addEventListener 의 마지막 매개 변수를 설정하여 이벤트 처리 과정을 전환할 수 있다.(false:버블, true:캡쳐)
+*			(2) 이벤트 처리기 함수 내부에서 this 키워드는 현재 엘리먼트를 참조한다.
+*			(3) 이벤트 객체는 처리 함수의 첫 번째 전달인자로 얻을 수 있다.
+*			(4) 대상 엘리먼트에 원하는 만큼 얼마든지 많은 이벤트를 연결할 수 있다.
+*				이렇게 해도 기존에 연결된 처리기는 전혀 덮어쓰지 않는다. 
+*		- W3C 연결 방법의 단점
+*			(1)IE 에서는 작동하지 않는다. IE 에서는 IE의 attachEvent함수를 대신 사용해야 한다.
+*/
+//	W3C 방법을 사용해서 이벤트 처리기를 연결하는 예
+// 첫번째 form 엘리먼트를 찾아서 submit 이벤트 처리기를 붙인다.
+/*
+document.getElementsByTagName("form")[0].addEventListener("submit", function(e) {
+	// 모든 폼 제출 시도를 막는다.
+//	alert(1);
+	return stopDefault(e);
+}, false);
 */
 
+// 문서의 body 엘리먼트에 keypress 이벤트 처리기를 붙인다.
+/* document.body.addEventListener("keypress", myKeyPressHandler, false); */
 
+// 페이지에 load 이벤트 처리기를 붙인다.
+//window.addEventLisener("load", function(){...}, false);
 
+/*
+*	DOM 연결 : IE	
+*		- attachEvent 함수 사용함
+*		- 매개변수 : 이벤트이름(ex. onclick), 이벤트를 처리할 함수)
+*		- 장점
+*			(1) 대상 엘리먼트에 원하는 만큼 많은 이벤트를 연결할 수 있고, 기존에 이미 연결된 처리기를 전혀 덮어쓰지 않는다. 
+*		- 단점
+*			(1) IE 는 이벤트의 버블 단계만 지원한다.
+*			(2) 이벤트 리스너 함수 내에서 this 키워드는 현재 엘리먼트가 아니라 window 객체를 가리킨다.
+*			(3) 이벤트 객체는 오직 window.event 매개 변수를 통해서만 사용 가능하다. 
+*			(4) 이벤트의 이름을 'on-타입' 형식으로 지명해야만 한다. 
+*			(5) IE 에서만 동작한다. IE 외의 브라우저에서는 W3C 의 addEventListener 를 사용해야 한다.
+*/
+// IE 의 이벤트 연결방법을 사용해서 엘리먼트에 처리기를 연결하는 예
+// 첫 번째 form 엘리먼트를 찾아서 submit 이벤트 처리기를 붙인다. 
+/*
+document.getElementsByTagName("form")[0].attachEvent("onclick", function(){
+	//모든 폼 제출 시도를 막는다.
+	return stopDefault();
+});
+*/
 
+// 문서의 body 엘리먼트에 keypress 이벤트 처리기를 붙인다.
+/* document.body.attachEvent("onkeypress", myKeyPressHandler); */
 
+// 페이지에 load 이벤트 처리기를 붙인다.
+//window.attachEvent("onload", function(){...}); 
 
+/*
+*	addEvent & removeEvent
+*		- 딘 에드워즈 개발
+*		- 이벤트 처리기를 붙이는 전통적인 수단 사용함
+*		- 브라우저의 디폴트 이벤트 막기, 올바른 이벤트 객체 포함, 올바른 this 키워드 포함 등..
+*		- 모든 브라우저에서 동작하며, 메모리 누수도 없음
+*		- addEvent 의 장점
+*			(1) 모든 브라우저, 최신 방법을 지원하지 않는 오래된 브라우저에서도 동작함
+*			(2) 연결된 함수 모두에서 현재 엘리먼트를 가리키는 this 키워드를 쓸 수 있다.
+*			(3) 브라우저의 기본 동작을 막는 브라우저 고유의 함수들, 이벤트 버블 과정을 중단시키는 브라우저 고유의 함수들을 하나의 통일된 방법을 대신한다.
+*			(4) 브라우저 종류에 관계 없이 이벤트 객체가 항상 첫 번째 전달인자로 전달된다.
+*		- addEvent 의 단점
+*			(1) 전통적인 방식의 이벤트 연결 기법을 사용하기 때문에 오직 버블 단계 에서만 동작한다.
+*/
+// addEvent 함수를 사용하는 예
+// 페이지 로딩이 완료되기를 기다린다.
+addEvent(window, "load", function(){
+	// 사용자에게서 keypress 이벤트가 들어오기를 지켜본다.
+	addEvent(document.body, "keypress", function(e){
+	
+	console.log(e.keycode);
+	console.log(e.ctrlKey);
+		// 만일 사용자가 Ctrl + 스페이스바를 누를 경우
+		if (e.keyCode === 32 && e.ctrlKey) {
+			// 특별한 폼을 표시한다.
+			this.getElementsByTagName("form")[0].style.display = "block";
+			
+			// 그 외에 다른 이상한 일이 일어나지 않게 한다.
+			e.preventDefalt();
+		}
+	});
+});
 
+// 딘 에드워즈가 작성한 addEvent 와 removeEvent 라이브러리
+/*
+*	addEvent / removeEvent written by Dean Edwards, 2005
+*	with input from Tino Zijdel
+*	http://dean.edwards.name/weblog/2005/10/add-event
+*/
+function addEvent(element, type, handler) {
+	// 각 이벤트 처리기에 고유의 ID 를 부여한다.
+	if(!handler.$$guid) {
+		handler.$$guid = addEvent.guid++;
+	}
+	
+	// 대상 엘리먼트의 이벤트 타입들에 대해 해시 테이블을 생성한다.
+	if(!element.events) {
+		element.events= {};
+	}
+	
+	// 엘리먼트, 이벤트 쌍에 대해 이벤트 처리기들의 해시 테이블을 생성한다.
+	var handlers = element.events[type];
+	if(!handlers) {
+		handlers = element.events[type] = {};
+		// 기존의 이벤트 처리기를 저장하낟(만일 존재한다면)
+		if(element["on"+type]) {
+			handlers[0] = element["on"+type];
+		}
+	}
+	
+	// 이벤트 처리기를 해시 테이블에 저장한다.
+	handlers[handler.$$guid] = handler;
+	// 모든 작업을 담당하는 전역 이벤트의 처리기를 할당한다.
+	element["on"+type] = handleEvent;
+}
 
+// 고유한 ID 를 부여하기 위한 카운터
+addEvent.guid = 1;
 
+function removeEvent(element, type, handler) {
+	// 해시 테이블에서 이벤트 처리기를 삭제한다.
+	if (element.events && element.events[type]) {
+		delete element.events[type][handler.$$guid];
+	}
+}
 
+function handleEvent(event) {
+	var returnValue = true;
+	
+	// 이벤트 객체를 얻는다(IE 에서는 전역 이벤트 객체를 사용한다.)
+	event = event || fixEvent(window.event);
+	
+	alert(event);
+	
+	// 이벤트 처리기들을 담고 있는 해시 테이블에 대한 참조를 얻는다.
+	var handlers = this.events[event.type];
+	
+	// 이벤트 처리기를 실행한다.
+	for (var i in handlers) {
+		this.handleEvent = handlers[i];
+		if(this.handleEvent(event) === false) {
+			returnValue = false;
+		}
+	}
+	
+	return returnValue;
+}
+
+// IE 의 이벤트 객체에 빠진 메서드 몇 종루를 추가한다.
+function fixEvent(event) {
+	// W3C 표준 이벤트 메서드들을 추가한다.
+	event.preventDefault = fixEvent.preventDefault;
+	event.stopPropagation = fixEvent.stopPropagation;
+	
+	return event; 
+}
+
+fixEvent.preventDefalt = function() {
+	this.returnValue = false;
+}
+
+fixEvent.stopPropagation = function() {
+	this.cancleBubble = true;
+}
